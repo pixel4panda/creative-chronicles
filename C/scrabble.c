@@ -1,4 +1,4 @@
-
+// Assignment to create a 2 player game of scrabble
 
 #include <cs50.h>
 #include <ctype.h>
