@@ -1,4 +1,4 @@
-// The was an assignment to create a mirrored pyramid out of #
+// Assignment to create a mirrored pyramid out of #
 // Goal:
 //     #  #
 //    ##  ##
