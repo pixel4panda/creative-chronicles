@@ -6,12 +6,12 @@ void selection_sort (int random[])
 
     // Define elements I am comparing
     // from position 0 to size, then from 1 to size ...
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < array_size; i++)
     {
         min = random[i];
         pos = i;
         // Find the smallest element
-        for (int j = i; j < size; j++)
+        for (int j = i; j < array_size; j++)
         {
             if (random[j] < min)
             {
