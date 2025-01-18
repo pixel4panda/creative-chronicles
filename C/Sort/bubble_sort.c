@@ -15,6 +15,7 @@ void bubble_sort (int random[])
         {
             // Compare pairs
             if (random[i + 1] < random[i])
+            // NOTE: from smallest to largest. If you want to sort through decreasing order, invert operational
             {
                 value = random[i];
                 random[i] = random[i + 1];
