@@ -51,3 +51,16 @@ sllnode* add_to_list(sllnode *head, VALUE xx)
   return head;
 }
 
+// Free an entire list
+void destroy(sllnode *head)
+{
+	sllnode *node = head;
+	if ( node->next == NULL)
+	{
+		free(node);
+		return;
+	}
+	destroy(node->next);
+}
+
+
