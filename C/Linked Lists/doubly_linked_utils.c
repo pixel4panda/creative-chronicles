@@ -2,7 +2,7 @@
 typedef struct dllist
 {
 	VALUE val;
-  struct dllist *previous;
+  	struct dllist *previous;
 	struct dllist *next;
 }
 dllnode;
