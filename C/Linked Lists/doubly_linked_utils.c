@@ -86,13 +86,14 @@ void delete(dllnode *target)
 }                      
                          
 // Free an entire list
-void destroy(sllnode *head)
+void destroy(dllnode *head)
 {
-	sllnode *node = head;
-	if ( node->next == NULL)
+	dllnode *node = head;
+	while (node != NULL)
 	{
-		free(node);
-		return;
+		node = head->next;
+		free(head);
+		head = node;
 	}
-	destroy(node->next);
+	return;
 }
