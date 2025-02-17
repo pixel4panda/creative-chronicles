@@ -54,13 +54,14 @@ sllnode* add_to_list(sllnode *head, VALUE xx)
 // Free an entire list
 void destroy(sllnode *head)
 {
-	sllnode *node = head;
-	if ( node->next == NULL)
-	{
-		free(node);
-		return;
-	}
-	destroy(node->next);
+    sllnode *temp = head;
+    while (temp != NULL)
+    {
+        temp = head->next;
+        free(head);
+        head = temp;
+    }
+    return;
 }
 
 
