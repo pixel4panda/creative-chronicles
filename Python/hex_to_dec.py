@@ -5,6 +5,11 @@ hexNumbers = {
     'A': 10, 'B': 11, 'C': 12, 'D': 13, 'E': 14, 'F': 15
 }
 
+def main():
+    user_hex = input ('Please input the hexadecimal: ')
+    print (hexToDec(user_hex))
+
+
 def hexToDec(hexNum):
 
     #user does not input a valid text
@@ -32,6 +37,5 @@ def hexToDec(hexNum):
     return answer
 
         
-
-user_hex = input ('Please input the hexadecimal: ')
-print (hexToDec(user_hex))
+if __name__ = "__main__":
+    main()
