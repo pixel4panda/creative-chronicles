@@ -259,7 +259,7 @@ Enables new users to create an account by submitting personal and login informat
 
 [Return to TOC](#table-of-contents)
 
-## sub-folder: reports**
+## sub-folder: reports
 ### monthly.html
 
 Displays a monthly financial report for each subcategory of the selected year.
@@ -343,98 +343,97 @@ Users can rename or delete the category, update subcategory names, move subcateg
 
 [Return to TOC](#table-of-contents)
 
-- **folder: transactions**
-    - **transactions.html**
-    
-        Displays all user transactions (both income and expenses) in an interactive table.
+## sub-folder: transactions
+### transactions.html
 
-        Users can view, add, edit, or delete transactions directly from this page using modal windows.
+Displays all user transactions (both income and expenses) in an interactive table.
 
-        *The modals allowed me to handle the add / edit transaction actions separately in the backend and avoid full page reloads*
+Users can view, add, edit, or delete transactions directly from this page using modal windows.
 
-        Key Points:  
-        1. Lists every transaction with fields for type, amount, category, subcategory, account, date, and action buttons (Edit / Delete).
-        2. Closed-account transactions appear grayed out and uneditable.
-        3. Includes a “Load More” button for pagination.
-        4. The "Add New" button opens the `#newTransactionModal`.
-        5. The "Edit" button opens the `#editTransactionModal` , which is prefilled with existing data from the database.
-        6. Subcategories on both modals are automatically populated upon selection of category. 
-        7. JavaScript reloads the full table upon modal sucessful form submission. 
+*The modals allowed me to handle the add / edit transaction actions separately in the backend and avoid full page reloads*
 
-        >Extends: `layout.html`  
-        >Variables used: `accounts`, `categories`, `load_more`, `offset`, `subcategories`, `transactions`  
-        >Filters Used: `m_display`  
-        >Depends on: `url_for('transactions')`, `/subcategories/<category_id>`, `/transactions/new`, `/transactions/edit/<id>`
+**Key Points:**  
+1. Lists every transaction with fields for type, amount, category, subcategory, account, date, and action buttons (Edit / Delete).
+2. Closed-account transactions appear grayed out and uneditable.
+3. Includes a “Load More” button for pagination.
+4. The "Add New" button opens the `#newTransactionModal`.
+5. The "Edit" button opens the `#editTransactionModal` , which is prefilled with existing data from the database.
+6. Subcategories on both modals are automatically populated upon selection of category. 
+7. JavaScript reloads the full table upon modal sucessful form submission. 
 
-        **Supporting Scripts**
-        
-        <ins>Dynamic Subcategory fetching</ins> 
+>Extends: `layout.html`  
+>Variables used: `accounts`, `categories`, `load_more`, `offset`, `subcategories`, `transactions`  
+>Filters Used: `m_display`  
+>Depends on: `url_for('transactions')`, `/subcategories/<category_id>`, `/transactions/new`, `/transactions/edit/<id>`
 
-        A JavaScript event listener monitors all `<select name="category">` elements.
-        
-        When the user changes a category, a `fetch('/subcategories/<category_id>')` call retrieves the relevant subcategories and repopulates the dropdown list in real time.
+**Supporting Scripts**
 
-        <ins>Populate Edit Transaction Modal</ins>
+<ins>Dynamic Subcategory fetching</ins> 
 
-        When the user clicks an "Edit" button, JavaScript retrieves all data attributes from that transaction. These values are automatically filled into the `editTransactionForm`
+A JavaScript event listener monitors all `<select name="category">` elements.
 
-        If the associated account is closed, editing is blocked and the user receives an alert. 
+When the user changes a category, a `fetch('/subcategories/<category_id>')` call retrieves the relevant subcategories and repopulates the dropdown list in real time.
 
-        <ins>Handle New Transaction Submission</ins>
+<ins>Populate Edit Transaction Modal</ins>
 
-        The “Save New Transaction” button sends the newTransactionForm data via `fetch('/transactions/new')`.
-        
-        The server responds with JSON indicating success or error. 
-        
-        On success, the modal closes and the table reloads.
+When the user clicks an "Edit" button, JavaScript retrieves all data attributes from that transaction. These values are automatically filled into the `editTransactionForm`
 
-        <ins>Handle Edit Transaction Submission</ins>
+If the associated account is closed, editing is blocked and the user receives an alert. 
 
-        The “Save Edit Transaction” button sends the editTransactionForm data via `fetch('/transactions/edit/<tr_id>')`.
-        
-        The form includes validation for missing IDs. The server responds with JSON indicating success or error. 
-        
-        On success, the modal closes and the table reloads.
-        
-        [Return to TOC](#table-of-contents)
+<ins>Handle New Transaction Submission</ins>
 
-- **dashboard.html**
+The “Save New Transaction” button sends the newTransactionForm data via `fetch('/transactions/new')`.
 
-    This page is still under development. Eventually it will allow users to see a short summary of their current month's spending and maybe I will add a mascot here. 
+The server responds with JSON indicating success or error. 
 
-    Key Points:  
-    1. Placeholder text and comments are in place for future content.
-    2. Will extend `layout.html` once fully developed.
+On success, the modal closes and the table reloads.
 
-    >Extends: `layout.html`  
-    >Variables used: None  
-    >Filters Used: None  
-    >Depends on: None
+<ins>Handle Edit Transaction Submission</ins>
 
-- **error.html**
+The “Save Edit Transaction” button sends the editTransactionForm data via `fetch('/transactions/edit/<tr_id>')`.
 
-    Generic error page for displaying custom error codes and messages.
-    
-    The app may still rely heavily on Flask’s default error handling unless explicitly wired to render this page. 
+The form includes validation for missing IDs. The server responds with JSON indicating success or error. 
 
-    Key Points:  
-    1. Displays `code` and `message` passed from the backend.
+On success, the modal closes and the table reloads.
 
-    >Extends: `layout.html`  
-    >Variables used: `code`, `message`  
-    >Filters Used: None  
-    >Depends on: `user_error(message, code)`
+[Return to TOC](#table-of-contents)
 
-    [Return to TOC](#table-of-contents)
+### dashboard.html
+
+This page is still under development. Eventually it will allow users to see a short summary of their current month's spending and maybe I will add a mascot here. 
+
+Key Points:  
+1. Placeholder text and comments are in place for future content.
+2. Will extend `layout.html` once fully developed.
+
+>Extends: `layout.html`  
+>Variables used: None  
+>Filters Used: None  
+>Depends on: None
+
+### error.html
+
+Generic error page for displaying custom error codes and messages.
+
+The app may still rely heavily on Flask’s default error handling unless explicitly wired to render this page. 
+
+Key Points:  
+1. Displays `code` and `message` passed from the backend.
+
+>Extends: `layout.html`  
+>Variables used: `code`, `message`  
+>Filters Used: None  
+>Depends on: `user_error(message, code)`
+
+[Return to TOC](#table-of-contents)
     
 ---
-### Folder: static
+## Folder: static
 
-- **folder: brand**
+### sub-folder: brand
 
-    The brand folder is my default to items that I possibly would like to make customizable or may change my mind in the future. Colors, logos, images.
+The brand folder is my default to items that I possibly would like to make customizable or may change my mind in the future. Colors, logos, images.
 
-- **styles.css**
+### styles.css
 
-    Obtained from Bootstrap and here I changed the default colors so my webpage would look more green
-
+Obtained from Bootstrap and here I changed the default colors so my webpage would look more green
