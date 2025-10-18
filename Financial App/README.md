@@ -115,15 +115,22 @@ Displays the user’s dashboard. Currently under development.
 
 [Return to TOC](#table-of-contents)
 
-### @dashboard()  
+### @accounts()  
 
-Displays the user’s dashboard. Currently under development. 
+Displays the user’s account balances for Sprouting and Grounded accounts. Allows viewing balances by year and automatically ensures the current month is computed. 
+
+This route fetches account balances from the `account_balances` table, splits accounts into Sprouting and Grounded classifications, organizes them by month, and computes totals for each month. 
 
 **Key Points:**  
-1. Intended to show a summary of accounts, spending, and other metrics in the future.
+1. Determines the selected year from query parameters or defaults to the current year.
+2. Automatically calls `archive_month()` to compute account totals and save monthly balances in data history.
+3. Fetches and organizes Sprouting and Grounded accounts into dictionaries keyed by account ID.
+4. Computes totals per month for both account classifications.
 
->Tables: None  
->Depends on: `render_template`
+>Tables: `accounts`, `account_balances`, `account_types`  
+>Depends on: `archive_month()`, `datetime`, `defaultdict`, `get_db()`,   `render_template`, `session`
+
+[Return to TOC](#table-of-contents)
 
 ### @transactions()
 
