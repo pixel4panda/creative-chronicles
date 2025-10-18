@@ -5,7 +5,7 @@ Ideally my app starts as a financial tracking app for myself. I am looking into 
 
 I wanted it to have a plant theme, because I like plants. So I used a plant for a logo and tried to keep my colors to an earthy / green tone
 
-
+---
 ## Table of Contents
 - [Project Features](#project-features)
 - [app.py](#apppy)
@@ -14,6 +14,7 @@ I wanted it to have a plant theme, because I like plants. So I used a plant for 
 - [Folder: templates](#folder-templates)
 - [Folder: static](#folder-static)
 
+---
 ## Project Features:
 
 TODO 
@@ -29,7 +30,7 @@ In research I found that when handling money a common workaround it to use INTEG
 **see money_func.py for further information*
 
 
-
+---
 ## app.py
 
 ### Application Setup
@@ -155,191 +156,192 @@ It prompts the database for subcategories matching the `category_id` and `user_i
 >Depends on: `get_db()`, `jsonify`, `session`
 
 ---
-### Folder: templates
+## Folder: templates
 
-- **layout.html**
+### layout.html
 
-    This is the base layout that all pages extend. It defines the global structure of the web app: the header, navbar, footer, and Bootstrap integration. 
+This is the base layout that all pages extend. It defines the global structure of the web app: the header, navbar, footer, and Bootstrap integration. 
 
-    Key Points:  
-    1. Provides a consistent navigation bar across all pages.
-    2. Includes `get_flashed_messages()` logic for alert messages.
-    3. Defines two key blocks: `{% block title %}` for dynamic page titles ; `{% block main %}` for each page’s main content.
-    4. Integrates Bootstrap 5.3 and a custom stylesheet `(/static/styles.css)`.
-    5. Navbar automatically highlights the current active page based on `request.path`.
-    6. “Settings” dropdown links to all edit routes (`edit_categories`, `edit_account`, `edit_atypes`).
+Key Points:  
+1. Provides a consistent navigation bar across all pages.
+2. Includes `get_flashed_messages()` logic for alert messages.
+3. Defines two key blocks: `{% block title %}` for dynamic page titles ; `{% block main %}` for each page’s main content.
+4. Integrates Bootstrap 5.3 and a custom stylesheet `(/static/styles.css)`.
+5. Navbar automatically highlights the current active page based on `request.path`.
+6. “Settings” dropdown links to all edit routes (`edit_categories`, `edit_account`, `edit_atypes`).
 
-    >Variables used: `get_flashed_messages()`, `request.path`  
-    >Filters Used: None  
-    >Depends on: All page templates
+>Variables used: `get_flashed_messages()`, `request.path`  
+>Filters Used: None  
+>Depends on: All page templates
 
-    [Return to TOC](#table-of-contents)
+[Return to TOC](#table-of-contents)
 
-- **folder: accounts**
+## sub-folder: accounts
         
-    - **accounts.html**
-    
-        Displays a yearly summary of all user accounts, separated into two classes: Sprouted (assets) and Grounded (liabilities). The decison to name them like that came from my plant theme. 
+### accounts.html
 
-        Allows selection of other years and provides link to add or edit accounts. 
+Displays a yearly summary of all user accounts, separated into two classes: Sprouted (assets) and Grounded (liabilities). The decison to name them like that came from my plant theme. 
 
-        Key Points:  
-        1. Fetches and display monthly balances from previous December and January through December of the current year. 
+Allows selection of other years and provides link to add or edit accounts. 
 
-            *This design decision came from my habit of comparing account totals to previous months; whenever there is a change in year, I always find myself comparing how balances transitioned.* 
+**Key Points:**  
+1. Fetches and display monthly balances from previous December and January through December of the current year. 
 
-        2. Totals for each month are shown at the bottom of each table.  
-        3. Two main tables: Sprouted (accounts for assets) and Grounded (accounts for liability)
-        4. Includes "+" button linking to `/edit_account` route for adding / editing accounts. 
+    *This design decision came from my habit of comparing account totals to previous months; whenever there is a change in year, I always find myself comparing how balances transitioned.* 
 
-        >Extends: `layout.html`  
-        >Variables used: `grounded_acc`, `grounded_totals`, `sprouted_acc`, `sprouted_totals`, `year`, `years`   
-        >Filters Used: `money`   
-        >Depends on: `url_for('edit_account')`
+2. Totals for each month are shown at the bottom of each table.  
+3. Two main tables: Sprouted (accounts for assets) and Grounded (accounts for liability)
+4. Includes "+" button linking to `/edit_account` route for adding / editing accounts. 
 
-        - **edit.html**
-        
-        Allows the user to add, edit, delete, and recover accounts.
-        
-        The page is divided in two sections: one lists all open accounts in an editable table and provides, the second lists closed accounts that can be reactivated.
+>Extends: `layout.html`  
+>Variables used: `grounded_acc`, `grounded_totals`, `sprouted_acc`, `sprouted_totals`, `year`, `years`   
+>Filters Used: `money`   
+>Depends on: `url_for('edit_account')`
 
-        Key Points:
+### edit.html
 
-        1. Displays all active accounts with editable form fields for type, name, and balance.
-        2. Provides a “Save Changes” button to update multiple accounts at once.
-        3. Includes a “Delete” option beside each account with a confirmation prompt to close it.
-        4. Offers an input row at the bottom of the table for adding a new account directly from the same page. (embedded on the same form)
-        5. Displays another table listing closed accounts, with a “Recover” button to reopen them if needed.
-        6. Includes a link to edit_atypes for adding or editing account types.
+Allows the user to add, edit, delete, and recover accounts.
 
-        >Extends: `layout.html`  
-        >Variables used: `a_types_`, `accounts`, `c_accounts`   
-        >Filters Used: None   
-        >Depends on: `url_for('edit_account')`, `url_for('edit_atypes')`
+The page is divided in two sections: one lists all open accounts in an editable table and provides, the second lists closed accounts that can be reactivated.
 
+**Key Points:**
 
-        [Return to TOC](#table-of-contents)
+1. Displays all active accounts with editable form fields for type, name, and balance.
+2. Provides a “Save Changes” button to update multiple accounts at once.
+3. Includes a “Delete” option beside each account with a confirmation prompt to close it.
+4. Offers an input row at the bottom of the table for adding a new account directly from the same page. (embedded on the same form)
+5. Displays another table listing closed accounts, with a “Recover” button to reopen them if needed.
+6. Includes a link to edit_atypes for adding or editing account types.
+
+>Extends: `layout.html`  
+>Variables used: `a_types_`, `accounts`, `c_accounts`   
+>Filters Used: None   
+>Depends on: `url_for('edit_account')`, `url_for('edit_atypes')`
 
 
-- **folder: authentication**
+[Return to TOC](#table-of-contents)
+
+
+## sub-folder: authentication
             
-    - **login.html**
+### login.html
 
-        *The login and registration pages were intentionally kept minimal. I wanted them to feel calm and easy to use, aligned with the plant-growth theme of the app.* 
-    
-        Handles user authentication and allows users to log into their account.
+*The login and registration pages were intentionally kept minimal. I wanted them to feel calm and easy to use, aligned with the plant-growth theme of the app.* 
 
-        A “Register” link is included for new users who don’t yet have an account.
+Handles user authentication and allows users to log into their account.
 
-        Key Points:  
-        1. Includes two main input fields: email and password, both required.
-        2. Uses the POST method to send data to the `/login` route for validation.
-        3. Includes a footer link guiding users to the registration page (`/register`) if they don’t yet have an account.
+A “Register” link is included for new users who don’t yet have an account.
 
-        >Extends: `layout.html`  
-        >Variables used: None  
-        >Filters Used: None   
-        >Depends on: `url_for('login')`, `url_for('register')`
-                
-    - **register.html**
-    
-        Enables new users to create an account by submitting personal and login information.
+**Key Points:**  
+1. Includes two main input fields: email and password, both required.
+2. Uses the POST method to send data to the `/login` route for validation.
+3. Includes a footer link guiding users to the registration page (`/register`) if they don’t yet have an account.
 
-        Key Points:  
-        1. Contains fields for first name, last name, email, password, and confirm password, all marked as required.
-        2. Uses the POST method to send data to the `/register` route for validation.
-        3. Registration automatically redirects users to login upon successful signup.
+>Extends: `layout.html`  
+>Variables used: None  
+>Filters Used: None   
+>Depends on: `url_for('login')`, `url_for('register')`
+            
+### register.html
 
-        >Extends: `layout.html`  
-        >Variables used: None   
-        >Filters Used: None   
-        >Depends on: `url_for('login')`, `url_for('register')`
-        
+Enables new users to create an account by submitting personal and login information.
 
-        [Return to TOC](#table-of-contents)
+**Key Points:**  
+1. Contains fields for first name, last name, email, password, and confirm password, all marked as required.
+2. Uses the POST method to send data to the `/register` route for validation.
+3. Registration automatically redirects users to login upon successful signup.
 
-- **folder: reports**
-    - **monthly.html**
-    
-        Displays a monthly financial report for each subcategory of the selected year.
+>Extends: `layout.html`  
+>Variables used: None   
+>Filters Used: None   
+>Depends on: `url_for('login')`, `url_for('register')`
 
-        Allows the user to switch between years and view subcategory totals across all months.
 
-        Key Points:  
-        1. Uses a dropdown to select the year, submitting via GET to refresh data.
-        2. Generates a table with 13 columns (previous December + current year months).
-        3. Dynamically displays totals per subcategory, formatted using the custom money filter.
+[Return to TOC](#table-of-contents)
 
-        >Extends: `layout.html`  
-        >Variables used: `categories`, `subcat_totals`, `subcategories`, `year`, `years`  
-        >Filters Used: `money`   
-        >Depends on: `url_for('monthly')`
+## sub-folder: reports**
+### monthly.html
 
-    - **yearly.html**
-    
-        Displays a yearly financial report for the amount of years a user has been registered.
+Displays a monthly financial report for each subcategory of the selected year.
 
-        Key Points:  
-        1. Generates a table with the number of columns equivalent to the number of years a user has been registered.
-        2. Dynamically displays totals per subcategory, formatted using the custom money filter.
+Allows the user to switch between years and view subcategory totals across all months.
 
-        >Extends: `layout.html`  
-        >Variables used: `categories`, `num_years`, `subcat_totals`, `subcategories`, `years`  
-        >Filters Used: `money`  
-        >Depends on: `url_for('yearly')`
+**Key Points:**  
+1. Uses a dropdown to select the year, submitting via GET to refresh data.
+2. Generates a table with 13 columns (previous December + current year months).
+3. Dynamically displays totals per subcategory, formatted using the custom money filter.
 
-        [Return to TOC](#table-of-contents)
-- **folder: settings**
-    - **set_atype.html**
-    
-        Manages account type definitions; allowing users to add, edit, or delete account types and assign each a classification (Sprouting or Grounded).
+>Extends: `layout.html`  
+>Variables used: `categories`, `subcat_totals`, `subcategories`, `year`, `years`  
+>Filters Used: `money`   
+>Depends on: `url_for('monthly')`
 
-        Key Points:  
-        1. Displays all existing account types with editable fields for type, abbreviation, and classification.
-        2. Includes a final row to add a new account type directly from the same table.
-        3. Provides a delete button beside each row with a confirmation prompt.
-        4. Explains the difference between Sprouting (assets you own) and Grounded (liabilities you owe) in a card below the table.
+### yearly.html
 
-        >Extends: `layout.html`  
-        >Variables used: `a_types`  
-        >Filters Used: None  
-        >Depends on: `url_for('edit_atypes')`
+Displays a yearly financial report for the amount of years a user has been registered.
 
-    - **set_categories.html**
-    
-        Displays all categories and their respective subcategories in a summarized, read-only layout.
+**Key Points:**  
+1. Generates a table with the number of columns equivalent to the number of years a user has been registered.
+2. Dynamically displays totals per subcategory, formatted using the custom money filter.
 
-        *Instead of placing all category and subcategory editing tools on one page, I intentionally separated them to reduce confusion when managing nested data in the backend. It also avoids the need to scroll through a long, crowded form.*
+>Extends: `layout.html`  
+>Variables used: `categories`, `num_years`, `subcat_totals`, `subcategories`, `years`  
+>Filters Used: `money`  
+>Depends on: `url_for('yearly')`
 
-        Provides quick access to edit each category and the ability to create a new one.
+[Return to TOC](#table-of-contents)
 
-        Key Points:  
-        1. Lists all categories with their nested subcategories indented underneath.
-        2. Each category includes an Edit button that navigates to its detailed editing page.
-        3. Allows adding new categories directly from the bottom of the table.
+## sub-folder: settings
+### set_atype.html
 
-        >Extends: `layout.html`  
-        >Variables used: `categories`, `subcategories`  
-        >Filters Used: None  
-        >Depends on: `url_for('category_settings')`, `url_for('edit_categories')`
+Manages account type definitions; allowing users to add, edit, or delete account types and assign each a classification (Sprouting or Grounded).
 
-    - **set_categorysolo.html**
-    
-        Provides a focused view to edit a single category and its related subcategories.
+**Key Points:**  
+1. Displays all existing account types with editable fields for type, abbreviation, and classification.
+2. Includes a final row to add a new account type directly from the same table.
+3. Provides a delete button beside each row with a confirmation prompt.
+4. Explains the difference between Sprouting (assets you own) and Grounded (liabilities you owe) in a card below the table.
 
-        Users can rename or delete the category, update subcategory names, move subcategories to another category, or create new subcategories.
+>Extends: `layout.html`  
+>Variables used: `a_types`  
+>Filters Used: None  
+>Depends on: `url_for('edit_atypes')`
 
-        Key Points:  
-        1. Editable category name at the top, with an option to delete it if no subcategories exist.
-        2. Each subcategory can be renamed, reassigned to another category, or deleted.
-        3. The bottom row allows the creation of a new subcategory directly under the same form.
+### set_categories.html
 
-        >Extends: `layout.html`  
-        >Variables used: `categories`, `cat`, `subcategories`  
-        >Filters Used: None  
-        >Depends on: `url_for('category_settings')`, `url_for('edit_categories')`
+Displays all categories and their respective subcategories in a summarized, read-only layout.
 
-        [Return to TOC](#table-of-contents)
+*Instead of placing all category and subcategory editing tools on one page, I intentionally separated them to reduce confusion when managing nested data in the backend. It also avoids the need to scroll through a long, crowded form.*
+
+Provides quick access to edit each category and the ability to create a new one.
+
+**Key Points:**  
+1. Lists all categories with their nested subcategories indented underneath.
+2. Each category includes an Edit button that navigates to its detailed editing page.
+3. Allows adding new categories directly from the bottom of the table.
+
+>Extends: `layout.html`  
+>Variables used: `categories`, `subcategories`  
+>Filters Used: None  
+>Depends on: `url_for('category_settings')`, `url_for('edit_categories')`
+
+### set_categorysolo.html
+
+Provides a focused view to edit a single category and its related subcategories.
+
+Users can rename or delete the category, update subcategory names, move subcategories to another category, or create new subcategories.
+
+**Key Points:**  
+1. Editable category name at the top, with an option to delete it if no subcategories exist.
+2. Each subcategory can be renamed, reassigned to another category, or deleted.
+3. The bottom row allows the creation of a new subcategory directly under the same form.
+
+>Extends: `layout.html`  
+>Variables used: `categories`, `cat`, `subcategories`  
+>Filters Used: None  
+>Depends on: `url_for('category_settings')`, `url_for('edit_categories')`
+
+[Return to TOC](#table-of-contents)
 
 - **folder: transactions**
     - **transactions.html**
