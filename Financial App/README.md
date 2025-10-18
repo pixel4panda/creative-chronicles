@@ -5,8 +5,8 @@ Ideally my app starts as a financial tracking app for myself. I am looking into 
 
 I wanted it to have a plant theme, because I like plants. So I used a plant for a logo and tried to keep my colors to an earthy / green tone
 
----
-### Table of Contents
+
+## Table of Contents
 - [Project Features](#project-features)
 - [app.py](#apppy)
 - [backend.py]
@@ -14,8 +14,7 @@ I wanted it to have a plant theme, because I like plants. So I used a plant for 
 - [Folder: templates](#folder-templates)
 - [Folder: static](#folder-static)
 
----
-### Project Features:
+## Project Features:
 
 TODO 
 - Add, edit, and delete transactions
@@ -23,7 +22,6 @@ TODO
 - Automatically update account balances and store them in a monthly history.
 - Pagination for
 
----
 #### Design Decisions:
 
 In research I found that when handling money a common workaround it to use INTEGER instead of FLOAT to avoid rounding errors. So everything is multiplied by 100 when storing values and divided by 100 when displaying. 
@@ -32,121 +30,129 @@ In research I found that when handling money a common workaround it to use INTEG
 
 
 
----
-### app.py
+## app.py
 
-- **Application Setup**
+### Application Setup
 
-    Flask app configured with session support using `flask_session`.
+Flask app configured with session support using `flask_session`.
 
-    Custom Jinja filters: `money` and `m_display`.
+Custom Jinja filters: `money` and `m_display`.
 
-    *The necessity for two different filters came from using money as an input, where only numbers are needed and using money as an information for the reader, where the '$' symbol is required for clear readability.*
+*The necessity for two different filters came from using money as an input, where only numbers are needed and using money as an information for the reader, where the '$' symbol is required for clear readability.*
 
-    All responses are configured to not cache `(after_request)`.
+All responses are configured to not cache `(after_request)`.
 
-    Database connection via `get_db()` and closed with `close_db()`.
+Database connection via `get_db()` and closed with `close_db()`.
 
-    >Authentication helper functions: `login_required`, `user_error`.  
-    >Libraries: `Flask`, `flask_session`, `sqlite3`, `werkzeug.security`
+>Authentication helper functions: `login_required`, `user_error`.  
+>Libraries: `Flask`, `flask_session`, `sqlite3`, `werkzeug.security`
 
-    [Return to TOC](#table-of-contents)
+[Return to TOC](#table-of-contents)
 
-- **@index()**  
+### @index()  
 
-    This route redirects the user to the dashboard if they are already logged in, otherwise, it prompts the login page.  
+This route redirects the user to the dashboard if they are already logged in, otherwise, it prompts the login page.  
 
-    It checks for a `user_id` in the session and redirects accordingly 
+It checks for a `user_id` in the session and redirects accordingly 
 
-    Key Points:  
-    1. Checks session to determine if user is logged in.  
-    2. Redirects to `/dashboard` for authenticated users.  
-    3. Redirects to `/login` for unauthenticated users.  
+**Key Points:** 
+1. Checks session to determine if user is logged in.  
+2. Redirects to `/dashboard` for authenticated users.  
+3. Redirects to `/login` for unauthenticated users.  
 
+>Tables: None  
+>Depends on: `redirect`, `session`
 
-    >Tables: None  
-    >Depends on: `redirect`, `session`
+### @login()  
 
-- **@login()**  
+Handles user login: displays the login page on GET requests and processes authentication on POST requests.
 
-    Handles user login: displays the login page on GET requests and processes authentication on POST requests.
+On POST, it validates the submitted email and password, checks credentials against the database, and sets the session `user_id` on success. 
 
-    On POST, it validates the submitted email and password, checks credentials against the database, and sets the session `user_id` on success. 
+**Key Points:**  
+1. Clears any existing session before login.  
+2. Validates form inputs (`email`, `password`).  
+3. Checks credentials against `users` table and sets `session["user_id"]`.  
+4. Redirects to `/dashboard` on successful login; otherwise calls `user_error`.
 
-    Key Points:  
-    1. Clears any existing session before login.  
-    2. Validates form inputs (`email`, `password`).  
-    3. Checks credentials against `users` table and sets `session["user_id"]`.  
-    4. Redirects to `/dashboard` on successful login; otherwise calls `user_error`.
+>Tables: `users`  
+>Depends on: `check_password_hash`, `get_db()`, `redirect`, `render_template`, `session`, `user_error`, `url_for`
 
-    >Tables: `users`  
-    >Depends on: `check_password_hash`, `get_db()`, `redirect`, `render_template`, `session`, `user_error`, `url_for`
+### @logout()  
 
-- **@logout()**  
+Logs the user out by clearing the session and redirects to the index route.
 
-    Logs the user out by clearing the session and redirects to the index route.
+**Key Points:**  
+1. Clears all session data.  
+2. Redirects user to `index()`, which will then send them to `login()` if unauthenticated
 
-    Key Points:  
-    1. Clears all session data.  
-    2. Redirects user to `index()`, which will then send them to `login()` if unauthenticated
+>Tables: None  
+>Depends on: `redirect`, `session`
 
-    >Tables: None  
-    >Depends on: `redirect`, `session`
+### @register()  
 
-- **@register()**  
+Handles user registration: displays the registration form on GET requests and processes new user creation on POST requests.
 
-    Handles user registration: displays the registration form on GET requests and processes new user creation on POST requests.
+**Key Points:**  
+1. Validates all form fields.  
+2. Checks if passwords match and email is not already registered.
+3. Inserts new user into `users` table with `generate_password_hash`.
+4. Flashes success message and redirects to `/login`.
 
-    Key Points:  
-    1. Validates all form fields.  
-    2. Checks if passwords match and email is not already registered.
-    3. Inserts new user into `users` table with `generate_password_hash`.
-    4. Flashes success message and redirects to `/login`.
+>Tables: `users`  
+>Depends on: `flash`, `get_db()`, `generate_password_hash`, `redirect`, `render_template`, `user_error`, `url_for`
 
-    >Tables: `users`  
-    >Depends on: `flash`, `get_db()`, `generate_password_hash`, `redirect`, `render_template`, `user_error`, `url_for`
+### @dashboard()  
 
-- **@dashboard()**  
+Displays the user’s dashboard. Currently under development. 
 
-    Displays the user’s dashboard. Currently under development. 
+**Key Points:**  
+1. Intended to show a summary of accounts, spending, and other metrics in the future.
 
-    Key Points:  
-    1. Intended to show a summary of accounts, spending, and other metrics in the future.
+>Tables: None  
+>Depends on: `render_template`
 
-    >Tables: None  
-    >Depends on: `render_template`
+[Return to TOC](#table-of-contents)
 
-    [Return to TOC](#table-of-contents)
+### @dashboard()  
 
-- **@transactions()**
+Displays the user’s dashboard. Currently under development. 
 
-    This route handles displaying, loading and deleting transactions.
+**Key Points:**  
+1. Intended to show a summary of accounts, spending, and other metrics in the future.
 
-    It fetches categories, subcategories and open accounts - so only open accounts can be selected by the user when inputting new transactions; supports pagination of 30 items at a time; and recalculates account balances when a transaction is deleted.
+>Tables: None  
+>Depends on: `render_template`
 
-    Key Points:                
-    1. Loads transactions is steps of 30 (`offset` + `Load More`).
-    2. Joins `transactions`, `accounts`,`account_types` to create a `defaultdict` to be passed to the template.
-    3. Deletes transactions on POST and updates balances and monthly archives through `archive_month()`
+### @transactions()
 
-    >Tables: `accounts`, `account_types`, `categories`, `subcategories`, `transactions`  
-    >Depends on: `archive_month()`, `flash`, `get_db()`, `redirect`,  `render_template`, `session`, `url_for`
+This route handles displaying, loading and deleting transactions.
 
-- **@get_subcategories(category_id)**
+It fetches categories, subcategories and open accounts - so only open accounts can be selected by the user when inputting new transactions; supports pagination of 30 items at a time; and recalculates account balances when a transaction is deleted.
 
-    This route returns all subcategories from a category for the logged user.
+**Key Points:**                
+1. Loads transactions is steps of 30 (`offset` + `Load More`).
+2. Joins `transactions`, `accounts`,`account_types` to create a `defaultdict` to be passed to the template.
+3. Deletes transactions on POST and updates balances and monthly archives through `archive_month()`
 
-    It prompts the database for subcategories matching the `category_id` and `user_id`, orders them alphabetically, and converts them into a JSON format to be sent to the front-end.
+>Tables: `accounts`, `account_types`, `categories`, `subcategories`, `transactions`  
+>Depends on: `archive_month()`, `flash`, `get_db()`, `redirect`,  `render_template`, `session`, `url_for`
 
-    *see transactions.html for further information*
+### @get_subcategories(category_id)
 
-    Key Points:                
-    1. Lists subcategories alphabetically (`ASC`), for a given `category_id` from the `user_id` passed through the `session`.
-    2. Converts SQLite rows into dictionaries and returns them as JSON.
+This route returns all subcategories from a category for the logged user.
 
-    >Tables: `subcategories`
+It prompts the database for subcategories matching the `category_id` and `user_id`, orders them alphabetically, and converts them into a JSON format to be sent to the front-end.
 
-    >Depends on: `get_db()`, `jsonify`, `session`
+*see transactions.html for further information*
+
+**Key Points:**               
+1. Lists subcategories alphabetically (`ASC`), for a given `category_id` from the `user_id` passed through the `session`.
+2. Converts SQLite rows into dictionaries and returns them as JSON.
+
+>Tables: `subcategories`
+
+>Depends on: `get_db()`, `jsonify`, `session`
 
 ---
 ### Folder: templates
