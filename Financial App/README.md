@@ -130,6 +130,67 @@ This route fetches account balances from the `account_balances` table, splits ac
 >Tables: `accounts`, `account_balances`, `account_types`  
 >Depends on: `archive_month()`, `datetime`, `defaultdict`, `get_db()`,   `render_template`, `session`
 
+### @edit_account()  
+
+Allows users to manage their existing accounts: edit details, close, recover, or create new ones.
+
+This route handles both open and closed accounts, updates monthly balances accordingly, and maintains historical accuracy via `archive_month()`.
+
+**Key Points:**  
+1. Supports updating account type, name, or balance for all open accounts.
+2. Allows closing or recovering accounts without losing transaction history.
+3. Automatically updates `account_balances` for the current month upon any edit.
+4. Validates account types and balance formats before committing changes.
+5. Adds new accounts with a unique name and type combination per user.
+6. Uses `m_read()` for computing and `m_display()` for formatting balances.
+
+>Tables: `accounts`, `account_balances`, `account_types`  
+>Depends on: `archive_month()`, `datetime`, `defaultdict`, `flash`, `get_db()`, `m_display()`, `m_read`, `render_template`, `redirect`, `session`, `timedelta`, `url_for`
+
+### @edit_atypes()  
+
+Allows users to manage the creation, modification, and deletion of account types.
+
+**Key Points:**  
+1. Displays all user-specific account types with editable fields.
+2. Prevents deletion of types currently used by any account.
+3. Supports updates to name, abbreviation, and classification fields.
+4. Adds new account types with validation to avoid duplicates.
+5. Uses flash messages to communicate validation errors or success.
+
+>Tables: `accounts`, `account_types`  
+>Depends on: `flash`, `get_db()`, `render_template`, `redirect`, `session`, `url_for`
+
+[Return to TOC](#table-of-contents)
+
+### @edit_categories()  
+
+Displays all user categories and subcategories, and allows the creation of new categories.
+
+**Key Points:**  
+1. Retrieves all user-specific categories and subcategories ordered by name.
+2. Supports adding new categories with validation for duplication.
+3. Redirects back to refresh the list after any change.
+
+>Tables: `categories`, `subcategories`  
+>Depends on: `flash`, `get_db()`, `render_template`, `redirect`, `session`, `url_for`
+
+### @category_settings(cat_id)  
+
+Manages a single category, identified by `cat_id`, and its associated subcategories.
+
+**Key Points:**  
+1. Accepts a cat_id parameter from the URL to identify the active category.
+2. Loads the selected category and all its subcategories for editing.
+3. Prevents duplicate category and subcategory names per user.
+4. Prevents category deletion if there are existing subcategories in it.
+5. Prevents subcategory deletion if linked to transactions. 
+6. Supports moving subcategories between categories.
+7. Automatically refreshes the page after any change for accurate state.
+
+>Tables: `categories`, `subcategories`, `transactions`  
+>Depends on: `flash`, `get_db()`, `render_template`, `redirect`, `session`, `url_for`
+
 [Return to TOC](#table-of-contents)
 
 ### @transactions()
