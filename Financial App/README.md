@@ -9,8 +9,8 @@ I wanted it to have a plant theme, because I like plants. So I used a plant for 
 ## Table of Contents
 - [Project Features](#project-features)
 - [app.py](#apppy)
-- [backend.py]
-- [money_func.py]
+- [backend.py](#backendpy)
+- [money_func.py](#money_funcpy)
 - [Folder: templates](#folder-templates)
 - [Folder: static](#folder-static)
 
@@ -253,6 +253,48 @@ It compares the new values to the existing record, updates changed fields, and r
 >Depends on: `archive_month()`, `datetime`, `get_db()`, `jsonify`,  `m_read()`, `session`
 
 [Return to TOC](#table-of-contents)
+
+### @monthly()
+
+This route displays a monthly summary of income and expenses per subcategory for a selected year.
+
+It compiles transaction data for each subcategory, calculating net totals (income minus expenses) for every month of the chosen year — including the previous December as a starting point. It organizes results into a structured dictionary, along with user-specific category and subcategory, and renders them in the monthly reports template.
+
+**Key Points:**                
+1. Retrieves available years from `account_balances` and selects the active year from form select or defaults to the current year.
+2. Fetches all user categories and subcategories to build a `defaultdict` of subcategory totals per month (0–12, where 0 = previous December).
+3. Computes monthly net totals (`income` - `expense`) using SQL.
+4. Passes structured data to the template for display.
+
+>Tables: `account_balances`, `categories`, `subcategories`, `transactions`  
+>Depends on: `datetime`, `defaultdict`, `get_db()`, `render_template`, `session`
+
+### @yearly()
+
+This route displays a yearly summary of income and expenses per subcategory for as long as the user has records.
+
+It compiles transaction data for each subcategory, calculating net totals (income minus expenses) for every year available. It organizes results into a structured dictionary, along with user-specific category and subcategory, and renders them in the yearly reports template.
+
+**Key Points:**                
+1. Retrieves all distinct years recorded in `account_balances` and lists them in descending order.
+2. Fetches all user categories and subcategories to build a `defaultdict` of subcategory totals per year.
+3. Computes yearly net totals (`income` - `expense`) using SQL.
+4. Passes structured data to the template for display.
+
+>Tables: `account_balances`, `categories`, `subcategories`, `transactions`  
+>Depends on: `defaultdict`, `get_db()`, `render_template`, `session`
+
+[Return to TOC](#table-of-contents)
+
+---
+## backend.py
+
+### @get_db()
+
+---
+## money_func.py
+
+### @m_display(value)
 
 ---
 ## Folder: templates
