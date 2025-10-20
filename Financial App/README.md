@@ -200,7 +200,7 @@ This route handles displaying, loading and deleting transactions.
 It fetches categories, subcategories and open accounts - so only open accounts can be selected by the user when inputting new transactions; supports pagination of 30 items at a time; and recalculates account balances when a transaction is deleted.
 
 **Key Points:**                
-1. Loads transactions is steps of 30 (`offset` + `Load More`).
+1. Loads transactions in steps of 30 (`offset` + `Load More`).
 2. Joins `transactions`, `accounts`,`account_types` to create a `defaultdict` to be passed to the template.
 3. Deletes transactions on POST and updates balances and monthly archives through `archive_month()`
 
@@ -219,9 +219,40 @@ It prompts the database for subcategories matching the `category_id` and `user_i
 1. Lists subcategories alphabetically (`ASC`), for a given `category_id` from the `user_id` passed through the `session`.
 2. Converts SQLite rows into dictionaries and returns them as JSON.
 
->Tables: `subcategories`
-
+>Tables: `subcategories`   
 >Depends on: `get_db()`, `jsonify`, `session`
+
+### @new_transaction()
+
+This route creates a new transaction without reloading the page.
+
+It validates all fields, checks if the selected account is open, determines amount sign based on `flow` classification of transactions and account classification (`Grounded` or `Sprouting`), and updates monthly balances through `archive_month()`.
+
+**Key Points:**                
+1. Validates all inputs and ensures the account belongs to the user.
+2. Uses `m_read()` to compute the amount value.
+3. Adjusts transaction sign according to flow and account type.
+4. Updates historical balances for the month and returns a JSON response.
+
+>Tables: `accounts`, `account_types`, `transactions`  
+>Depends on: `archive_month()`, `datetime`, `get_db()`, `jsonify`,  `m_read()`, `session`
+
+### @edit_transaction(tr_id)
+
+This route edits an existing transaction without reloading the page.
+
+It compares the new values to the existing record, updates changed fields, and recalculates affected monthly archives / account balances for both the original and new transaction dates.
+
+**Key Points:**                
+1. Validates all inputs and ensures the transaction exists.
+2. Recomputes signs for amounts based on flow and account type.
+3. Commits only if any changes are detected.
+4. Calls `archive_month()` for both new and old dates if the transaction date changes.
+
+>Tables: `accounts`, `account_types`, `transactions`  
+>Depends on: `archive_month()`, `datetime`, `get_db()`, `jsonify`,  `m_read()`, `session`
+
+[Return to TOC](#table-of-contents)
 
 ---
 ## Folder: templates
