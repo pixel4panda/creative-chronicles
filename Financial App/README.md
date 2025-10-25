@@ -17,11 +17,14 @@ I wanted it to have a plant theme, because I like plants. So I used a plant for 
 ---
 ## Project Features:
 
-TODO 
-- Add, edit, and delete transactions
-- Categorize income and expenses
-- Automatically update account balances and store them in a monthly history.
-- Pagination for
+- User Authentication: secure registration, login, and logout functionality with password hashing and session management.
+- Account Management: create, edit, update, close, and recover personal accounts; classify them as Sprouting (assets) or Grounded (liabilities) using customizable account types.
+- Custom Account Types: add, rename, abbreviate, and delete user-defined account types with validation to prevent deletion if in use.
+- Category & Subcategory System: Organize transactions with hierarchical categories and subcategories; duplicate prevention and transaction-linked deletion safeguards.
+- Transaction Tracking: add, edit, and delete income/expense transactions via modals (no page reload); real-time subcategory loading; automatic sign adjustment based on account classification and flow direction.
+- Balance Automation: account balances updated on every transaction; monthly archiving via archive_month() preserves historical accuracy even when editing/deleting past records.
+- Monthly & Yearly Reports: breakdowns per subcategory; includes previous December as baseline for year-over-year comparison; dynamic year selection.
+- Data Integrity: all monetary values stored as integers (cents) to avoid floating-point errors; custom Jinja filters (money, m_display) for consistent formatting.
 
 ---
 ## app.py
