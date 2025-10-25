@@ -23,13 +23,6 @@ TODO
 - Automatically update account balances and store them in a monthly history.
 - Pagination for
 
-#### Design Decisions:
-
-In research I found that when handling money a common workaround it to use INTEGER instead of FLOAT to avoid rounding errors. So everything is multiplied by 100 when storing values and divided by 100 when displaying. 
-
-**see money_func.py for further information*
-
-
 ---
 ## app.py
 
@@ -371,7 +364,51 @@ When archiving the current month, it also updates the live account balance in th
 ---
 ## money_func.py
 
+*In research I found that when handling money a common workaround it to use INTEGER instead of FLOAT to avoid rounding errors. So everything is multiplied by 100 when storing values and divided by 100 when displaying.* 
+
 ### @m_display(value)
+
+Converts a stored integer (in cents) to a formatted string with two decimal places.
+
+Used to display monetary values consistently across the app.
+
+**Key Points:**    
+
+1. Divides stored values by 100 to restore the correct decimal placement.
+2. Formats the result to two decimal places.
+3. Returns an empty string if the value is invalid or missing.
+
+>Depends on: None 
+
+### @m_read(value)
+
+Converts a string or float monetary value into an integer representation (in cents).
+
+Ensures consistency when storing monetary amounts in the database.
+
+**Key Points:**    
+
+1. Multiplies values by 100 for integer storage.
+2. Handles float conversions safely.
+3. Returns an integer result for database operations.
+
+>Depends on: None  
+
+### @money(value)
+
+Formats a stored monetary value into a display-ready string with a dollar sign.
+
+Wraps `m_display()` to standardize how values appear in templates.
+
+**Key Points:**    
+
+1. Calls `m_display` to convert cents to dollars.
+2. Adds a `$` prefix to formatted values.
+3. Returns an empty string for invalid inputs.
+
+>Depends on: `m_display`
+
+[Return to TOC](#table-of-contents)
 
 ---
 ## Folder: templates
