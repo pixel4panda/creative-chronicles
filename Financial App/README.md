@@ -291,6 +291,83 @@ It compiles transaction data for each subcategory, calculating net totals (incom
 
 ### @get_db()
 
+This function initializes and returns a SQLite database connection for the current Flask application.
+
+Automatically enables foreign key support and sets rows to be returned as dictionaries (`sqlite3.Row`).
+
+**Key Points:**    
+
+1. Creates a single database connection per request using Flask.
+2. Ensures `PRAGMA foreign_keys = ON` for relationships between tables.
+3. Uses `sqlite3.Row` to allow key-based access to row values.
+4. Returns the active database connection.
+
+>Depends on: `g`, `sqlite3`
+
+### @close_db(error=None)
+
+This function closes the database connection at the end of a request.
+
+Safely terminates the active connection from Flask.
+
+**Key Points:**    
+
+1. Checks for an existing database connection.
+2. Closes the connection if found.
+
+>Depends on: `g`
+
+### @login_required(f)
+
+Decorator that restricts access to routes requiring authentication.
+
+Redirects users to `/login` if no active session is found.
+
+**Key Points:**    
+
+1. Checks if `user_id` exists in the session.
+2. Redirects unauthorized users to `/login`.
+3. Preserves wrapped function metadata using `@wraps`.
+
+>Depends on: `functools.wraps`, `redirect`, `session`
+
+### @user_error(message, code=400)
+
+Renders a user-facing error page with a formatted message and HTTP status code.
+
+Escapes special characters for safe display using custom replacements.
+
+**Key Points:**    
+
+1. Escapes special characters to prevent template rendering issues.
+2. Returns the `error.html` template along with the provided status code.
+3. Defaults to code `400` if none is specified.
+
+>Depends on: `render_template`
+
+[Return to TOC](#table-of-contents)
+
+### @archive_month(year, month)
+
+This function records the closing balance, total income, and total expenses for each account for a specific month.
+
+If the record already exists, it updates only the changed values.
+
+When archiving the current month, it also updates the live account balance in the `accounts` table.
+
+**Key Points:**    
+
+1. Calculates the last day of the target and previous month.
+2. Retrieves each account’s previous balance from `account_balances` or directly from `accounts` if none exists.
+3. Sums all transactions between the two months to calculate new balances.
+4. Inserts or updates the `account_balances` table with monthly totals.
+5. If archiving the current month, synchronizes the `accounts` table with the new balance.
+
+>Tables: `accounts`, `account_balances`, `transactions`   
+>Depends on: `datetime`, `get_db()`, `session`, `timedelta`  
+
+[Return to TOC](#table-of-contents)
+
 ---
 ## money_func.py
 
