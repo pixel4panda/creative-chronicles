@@ -1,5 +1,5 @@
 # SPROUTFOLIO
-#### Video Demo:
+#### Video Demo: https://youtu.be/lBZnq98GSaY
 #### Description:
 Ideally my app starts as a financial tracking app for myself. I am looking into the possibility of expanding it and letting friends try it out too.
 
